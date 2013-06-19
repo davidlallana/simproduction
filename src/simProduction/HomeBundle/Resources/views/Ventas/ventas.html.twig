@@ -1,0 +1,219 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+{% for key, flash in app.session.getFlashes() %}
+<span id="{{flash}}"></span>
+{% endfor %}
+<article class="three-fifth  data-block">
+	<div class="data-container with-header full-height">
+		<h2>Histórico de ventas</h2>
+		<!--<header>
+			<div class="nav">
+				<span id="btnCompetencia">
+					<a href='#' >
+						Ver gráfico de compras<img src="{{ asset('images/arrow_up.png') }}" alt="" />
+					</a>
+				</span>				
+			</div>	
+		</header>-->
+		<div class="clear" id="historial"></div>
+	</div>
+</article>
+<article class="two-fifth-last data-block">
+	<div class="data-container with-header min-height">
+		<header>
+			<h2>Lotes de promoción</h2>						
+		</header>
+		<div class="clear"></div>
+		<form action="{{ path('ventas') }}" method="post" {{ form_enctype(form) }}>
+			<div class="error">{{ form_errors(form.cantidad) }}</div>	
+			<div class="error">{{ form_errors(form.precio) }}</div>	
+			<strong>{{ form_label(form.cantidad)}}:</strong>
+			{{ form_widget(form.cantidad, {'attr': {'class':'corto'}})}}
+			<strong>{{ form_label(form.precio)}}:</strong>
+			{{ form_widget(form.precio, {'attr': {'class':'corto'}})}}
+			{{ form_rest(form) }}								
+			<button class="btn right" type="submit">+</button>
+		</form>
+		<div id="lotes"></div>		
+	</div>
+</article>
+<article id="competencia" class="two-fifth-last data-block">
+	<div class="data-container with-header">	
+		<header><h2>Lotes de la competencia</h2></header>		
+		<div class="clear"></div><div id="boxscroll4">
+			<table class="normal sortable">			
+				<tbody>					
+					<tr>
+						<th>Empresa</th>
+						<th class="sorttable_numeric">Cantidad</th>
+						<th class="sorttable_numeric">Precio</th>
+					</tr>
+					{% for lote in lotesSector %}	
+						<tr class="normal">
+							<td>{{ lote.empresa.nombre }}</td>
+							<td>{{ lote.cantidad }} {{lote.sector.producto}}</td>
+							<td class="ancho100">{{ lote.precio }} €</td>
+						</tr>
+					{% endfor %}						
+				</tbody>
+			</table>	
+		</div><br/>				
+	</div>
+</article>
+
+<article class="two-fifth-last data-block">
+	<div class="data-container with-header ">
+		<header>
+			<h2>Venta de emergencia</h2>			
+		</header>
+		<section>
+			<form action="{{ path('ventaEmergencia') }}" method="post" id="ventaEmergencia" {{ form_enctype(form2) }}>
+				<p class="justify">Esta venta es de utilidad solo en casos excepcionales. El precio de venta de producto es considerablemente inferior al de mercado. El precio actual de venta de es de: 		
+				<strong>{{empresa.sector.precioExcep}} {% if empresa.sector.id==1 %}€/Kg{% else %}€/ud{% endif %}</strong><br/><br/>				
+				<b>Cantidad de producción a vender:</b><br/><div class="error">{{ form_errors(form2.cantidad) }}</div>
+				{{ form_widget(form2.cantidad,{'attr': {'onChange':'multiplicar();'}})}}<br/>
+				<b>Total a ingresar: </b>{{ form_widget(form2.precio, {'attr': {'value':empresa.sector.precioExcep}})}}<input type="text" disabled="disabled" id="venta_total"/>
+			</form>
+			<button class="btn close" onClick="confirmar(1,0);">Realizar venta</button>
+		</section>
+	</div>
+</article>
+
+<div class="modal" id="modal">
+	<div class="heading" id="heading">
+		<div class="titulo" id="titulo"></div>
+	</div>
+	<div class="content content2" id="content">
+		<div class="pregunta" id="pregunta"></div>
+	</div>
+	<div class="buttons" id="buttons"></div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+  $(document).ready(function() {
+	$("#boxscroll4").niceScroll({touchbehavior:true});	  
+  });
+</script>
+<script>	
+	$('lotes').ready(function() {
+		mostrarLotes();
+	});
+	$('historial').ready(function() {
+		mostrarHistorial();
+	});
+/*
+	function showCompetencia()	{		
+		document.getElementById("competencia").style.display ="block";
+		document.getElementById("btnCompetencia").innerHTML ='<a href=# onClick="ocultarCompetencia();" >Ocultar competencia<img src="{{ asset("images/arrow_up.png") }}" alt="" /></a>';
+	}
+	
+	function ocultarCompetencia()	{		
+		document.getElementById("competencia").style.display ="none";
+		document.getElementById("btnCompetencia").innerHTML ='<a href=# onClick="showCompetencia();" >Ver competencia<img src="{{ asset("images/arrow.png") }}" alt="" /></a>';
+	}*/
+	
+	function confirmar(tipo,id)	{
+		if(tipo==1){
+			document.getElementById("heading").innerHTML ="Confirmación de venta de emergencia";
+			document.getElementById("pregunta").innerHTML ="¿Estás seguro de que quieres realizar esta venta de emergencia?";
+			document.getElementById("buttons").innerHTML ='<button class="btn2 close" onClick="realizarVenta();">Sí</button><button class="btn2 close">No</button>';
+		}else{
+			document.getElementById("heading").innerHTML ="Borrar lote";
+			document.getElementById("pregunta").innerHTML ="¿Estás seguro de que quieres borrar este lote?";
+			document.getElementById("buttons").innerHTML ='<button class="btn2 close" onClick="borrarLote('+ id +');">Sí</button><button class="btn2 close">No</button>';
+		}
+		$('#modal').reveal({
+			animation: 'fade',     
+			animationspeed: 400,       
+			closeonbackgroundclick: false,      
+			dismissmodalclass: 'close' 
+		});
+	}	
+	function realizarVenta()	{
+		document.forms["ventaEmergencia"].submit();
+	}		
+	function mostrarHistorial()	{
+		jQuery.ajax({	
+			url: '{{ path('mostrarHistorialVentas') }} ',
+			dataType: 'html',
+			beforeSend: function(){
+				$("div#historial").empty();
+				$("div#historial").append('<img src="{{ asset('images/loading.gif') }}" class="loading" alt=""/>'); 
+			},
+			success: function(data){
+				$("div#historial").empty();
+				$("div#historial").append(data); 
+				
+			}		
+		})
+	}	
+	function mostrarLotes()	{
+		jQuery.ajax({	
+			url: '{{ path('mostrarLotesVentas') }} ',
+			dataType: 'html',
+			beforeSend: function(){
+				$("div#lotes").empty();
+				$("div#lotes").append('<img src="{{ asset('images/loading.gif') }}" class="loading" alt=""/>'); 
+			},
+			success: function(data){
+				$("div#lotes").empty();
+				$("div#lotes").append(data); 
+			}		
+		})
+	}	
+	function borrarLote(lot) {
+		var ajaxURL = 'borrarLote/' + lot;
+		jQuery.ajax({	
+			url: ajaxURL,
+			dataType: 'html',
+			success: function(data){
+				var $toast = toastr['success']('El lote en promoción se ha borrado correnctamente.', '');
+				mostrarLotes();				
+			}		
+		})
+	}	
+	function multiplicar(){
+		{% if empresa.sector.id==1 %}$max={{empresa.minerales}};
+		{% elseif empresa.sector.id==2%}$max={{empresa.herramientas}};
+		{% else %}$max={{empresa.vehiculos}};{% endif %}
+		m1 = document.getElementById("venta_cantidad").value;
+		if(m1<1) m1=0;
+		else if(m1>$max) m1=$max;
+		document.getElementById("venta_cantidad").value=m1;
+		m2 = document.getElementById("venta_precio").value;
+		r = m1*m2;
+		document.getElementById("venta_total").value = r+" €";
+	}
+</script>
+<script type="text/javascript">	
+	(function($){
+		$(lote).ready(function(){			
+			var $toast = toastr['success']('El lote en promoción se ha añadido correctamente.', '');
+		});	
+	})(jQuery);
+</script>
+<script type="text/javascript">	
+	(function($){
+		$(ventaCorrecta).ready(function(){			
+			var $toast = toastr['success']('La venta se ha finalizado con éxito.', '');
+		});	
+	})(jQuery);
+</script>
+<script type="text/javascript">	
+	(function($){
+		$(ventaIncorrecta).ready(function(){			
+			var $toast = toastr['error']('Error al intentar realizar la venta. La cantidad debe ser mayor que 0.', '');
+		});	
+	})(jQuery);
+</script>
+<script type="text/javascript">	
+	(function($){
+		$(limite).ready(function(){
+			var $toast = toastr['error']('Ya tienes 4 lotes en el mercado. Borra alguno de los existentes si quieres añadir uno nuevo.', '');
+		});	
+	})(jQuery);
+</script>
+{% endblock %}

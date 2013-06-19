@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="es"> 
+<head> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<title>Registro - SimProduction</title>
+		<link href="{{ asset('css/login2.css') }}" type="text/css" rel="stylesheet" />
+	    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
+    </head>
+    <body>		
+		<div class="header ">
+			<div class="bg">
+				<div class="logo"> 
+					<img src="{{ asset('images/logo.png') }}" alt="logo"/>
+				</div>
+			</div>
+		</div>		
+		<div class="cabecera">
+			<h3><a href="index">Inicio</a> › Registro</h3>
+		</div>
+		<div class="bg titulo">
+			<h2>REGÍSTRATE</h2>
+			<h1>Y EMPIEZA A JUGAR</h1>
+			<h3>Rellena el siguiente formulario con tus datos para darte de alta en simProduction.</h3>
+		</div>
+		<div class="wrap">
+			<div class="textoI">		
+				<div class="formregistro">
+					<form action="{{ path('registro') }}" method="post" {{ form_enctype(form) }} >
+  {{ form_errors(form) }}
+ {{ form_widget(form.username) }}
+ {{ form_widget(form.password) }}
+ {{ form_widget(form.email) }}
+ <input type="hidden" id="form__token" name="form[_token]" required="required" value="f58a9c61d95ec47bce6f4e446dec95b1f4cce19d" />
+						{{ form_rest(form) }}					 
+						<br/><span>Al hacer clic en registrar, aceptas los <a href="termsofuse">términos del uso</a>.</span>												
+						<br/><br/><button class="btn" type="submit">Registrar</button>								
+					</form>		
+				</div>				
+			</div>
+			<div class="imagenD2">
+				<img src="{{ asset('images/registro.png') }}" alt="" />
+			</div>	
+		</div>	
+		<div class="bg">
+			<div class="footer clear">	
+				<div class="navigation">
+					<ul>
+						<li><a href="{{ url('index') }}">Inicio</a></li>
+						<li><a href="{{ url('acercaDe') }}">Acerca de</a></li>
+						<li><a href="{{ url('termsOfUse') }}">Términos de uso</a></li>
+						<li><a href="{{ url('ayuda') }}">F.A.Q.</a></li>			
+						<li class="laster"><a href="{{ url('registro') }}">Registro</a></li>			
+					</ul>
+				</div>		
+				<div class="author">Copyright © 2013, Cátedra Telefónica - Deusto</div>
+			</div>
+		</div>	
+		<script src="{{ asset('js/jquery.min.js') }}"></script>
+		<script src="{{ asset('js/html5placeholder.jquery.js') }}"></script>
+		<script>
+			$(function(){
+			  $(':input[placeholder]').placeholder();
+			});
+		</script>
+	</body>
+</html>
+
+

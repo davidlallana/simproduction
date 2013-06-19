@@ -1,0 +1,249 @@
+imports:
+    - { resource: parameters.ini }
+    - { resource: security.yml }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: es }
+    secret:          %secret%
+    charset:         UTF-8
+    router:          { resource: "%kernel.root_dir%/config/routing.yml" }
+    form:            true
+    csrf_protection: true
+    validation:      { enable_annotations: true }
+    templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
+    session:
+        default_locale: %locale%
+        auto_start:     true
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    # java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        # closure:
+        #     jar: %kernel.root_dir%/java/compiler.jar
+        # yui_css:
+        #     jar: %kernel.root_dir%/java/yuicompressor-2.4.2.jar
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   %database_driver%
+        host:     %database_host%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8
+
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true     
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+
+jms_security_extra:
+    secure_controllers:  true
+    secure_all_services: false
+
+#SONATA Admin
+sonata_block:
+
+    default_contexts: [cms]
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+        sonata_admin_doctrine_phpcr.tree_block:
+            settings:
+                id: '/cms'
+            contexts:   [admin]
+        sonata.block.service.text:
+        sonata.block.service.action:
+        sonata.block.service.rss:
+
+sonata_doctrine_orm_admin:
+    # default value is null, so doctrine uses the value defined in the configuration
+    entity_manager: ~
+
+    templates:
+        form:
+            - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig
+        filter:
+            - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
+        types:
+            list:
+                array:      SonataAdminBundle:CRUD:list_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:list_date.html.twig
+                time:       SonataAdminBundle:CRUD:list_time.html.twig
+                datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_list_field.html.twig
+                trans:      SonataAdminBundle:CRUD:list_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
+
+            show:
+                array:      SonataAdminBundle:CRUD:show_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:show_date.html.twig
+                time:       SonataAdminBundle:CRUD:show_time.html.twig
+                datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_show_field.html.twig
+                trans:      SonataAdminBundle:CRUD:show_trans.html.twig
+                string:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
+
+
+sonata_admin:
+    title: 'Administración simProduction'
+    templates:
+        layout: SonataAdminBundle::standard_layout.html.twig
+        ajax: SonataAdminBundle::ajax_layout.html.twig
+        list: SonataAdminBundle:CRUD:list.html.twig
+        show: SonataAdminBundle:CRUD:show.html.twig
+        edit: SonataAdminBundle:CRUD:edit.html.twig
+
+
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts: [admin]
+
+#sonata.admin_doctrine_orm.block.audit:
+# contexts: [admin]
+
+        sonata.block.service.text:
+        sonata.block.service.action:
+        sonata.block.service.rss:
+
+# Some specific block from the SonataMediaBundle
+#sonata.media.block.media:
+#sonata.media.block.gallery:
+#sonata.media.block.feature_media:
+
+services:
+    sonata.simproduction.admin.usuarios:
+        class: simProduction\HomeBundle\Admin\UsuariosAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Tablas, label: Usuarios }
+        arguments: [null, simProduction\HomeBundle\Entity\Usuario, null]
+    sonata.simproduction.admin.empresas:
+        class: simProduction\HomeBundle\Admin\EmpresasAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Tablas, label: Empresas }
+        arguments: [null, simProduction\HomeBundle\Entity\Empresa, null]
+
+    sonata.simproduction.admin.trabajador:
+        class: simProduction\HomeBundle\Admin\TrabajadoresAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Personal cualificado, label: Trabajadores }
+        arguments: [null, simProduction\HomeBundle\Entity\Trabajador, null]   
+    sonata.simproduction.admin.perfilTrabajador:
+        class: simProduction\HomeBundle\Admin\PerfilesTrabajadorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Personal cualificado, label: Perfiles de trabajador }
+        arguments: [null, simProduction\HomeBundle\Entity\PerfilTrabajador, null]    
+    sonata.simproduction.admin.nombres:
+        class: simProduction\HomeBundle\Admin\NombresAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Generador de personal, label: Nombres }
+        arguments: [null, simProduction\HomeBundle\Entity\Nombres, null]
+    sonata.simproduction.admin.apellidos:
+        class: simProduction\HomeBundle\Admin\ApellidosAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Generador de personal, label: Apellidos }
+        arguments: [null, simProduction\HomeBundle\Entity\Apellidos, null]
+    sonata.simproduction.admin.banco:
+        class: simProduction\HomeBundle\Admin\BancoAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Banco, label: Banco }
+        arguments: [null, simProduction\HomeBundle\Entity\Banco, null] 
+    sonata.simproduction.admin.ct:
+        class: simProduction\HomeBundle\Admin\CTAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Tablas, label: Centros tecnológicos }
+        arguments: [null, simProduction\HomeBundle\Entity\CT, null]    
+    sonata.simproduction.admin.curso:
+        class: simProduction\HomeBundle\Admin\CursosAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Personal cualificado, label: Cursos }
+        arguments: [null, simProduction\HomeBundle\Entity\Curso, null] 
+    sonata.simproduction.admin.cuadrante:
+        class: simProduction\HomeBundle\Admin\CuadrantesAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Tablas, label: Cuadrantes }
+        arguments: [null, simProduction\HomeBundle\Entity\Cuadrante, null]   
+    sonata.simproduction.admin.lote:
+        class: simProduction\HomeBundle\Admin\LotesAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Compra & Venta, label: Lotes }
+        arguments: [null, simProduction\HomeBundle\Entity\Lote, null]    
+    sonata.simproduction.admin.mensaje:
+        class: simProduction\HomeBundle\Admin\MensajesAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Mensajes, label: Mensajes }
+        arguments: [null, simProduction\HomeBundle\Entity\Mensaje, null]  
+    sonata.simproduction.admin.movimientoFinanciero:
+        class: simProduction\HomeBundle\Admin\MovimientosFinancierosAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Banco, label: Movimientos financieros}
+        arguments: [null, simProduction\HomeBundle\Entity\movimientoFinanciero, null]  
+    sonata.simproduction.admin.nivel:
+        class: simProduction\HomeBundle\Admin\NivelesAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Tablas, label: Niveles }
+        arguments: [null, simProduction\HomeBundle\Entity\Nivel, null]
+
+    sonata.simproduction.admin.nivelFormacionTrabajador:
+        class: simProduction\HomeBundle\Admin\NivelesFormacionesTrabajadorAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Personal cualificado, label: Niveles de formación del trabajador }
+        arguments: [null, simProduction\HomeBundle\Entity\NivelFormacionTrabajador, null]
+    sonata.simproduction.admin.formacionesnivel:
+        class: simProduction\HomeBundle\Admin\FormacionesNivelAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Personal cualificado, label: Requisitos de formación para nivel }
+        arguments: [null, simProduction\HomeBundle\Entity\FormacionesNivel, null]
+    sonata.simproduction.admin.prestamo:
+        class: simProduction\HomeBundle\Admin\PrestamosAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Banco, label: Préstamos }
+        arguments: [null, simProduction\HomeBundle\Entity\Prestamo, null]
+    sonata.simproduction.admin.sector:
+        class: simProduction\HomeBundle\Admin\SectoresAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Tablas, label: Sectores }
+        arguments: [null, simProduction\HomeBundle\Entity\Sector, null] 
+    sonata.simproduction.admin.venta:
+        class: simProduction\HomeBundle\Admin\VentasAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Compra & Venta, label: Ventas }
+        arguments: [null, simProduction\HomeBundle\Entity\Venta, null]   
+  
+    sonata.simproduction.admin.tarea:
+        class: simProduction\HomeBundle\Admin\TareasAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Tareas programadas, label: Tareas }
+        arguments: [null, simProduction\HomeBundle\Entity\Tarea, null]

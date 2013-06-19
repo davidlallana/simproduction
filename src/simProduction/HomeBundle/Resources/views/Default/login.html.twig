@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="es"> 
+	<head> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<title>SimProduction</title>
+		<link href="{{ asset('css/login.css') }}" type="text/css" rel="stylesheet" />
+		<link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
+	</head>
+	<body>
+		<div class="header">		
+			<div class="bg">	
+				<div class="logo"> 
+					<img src="{{ asset('images/logo.png') }}" alt="logo"/>
+				</div>
+			</div>				
+		</div>			
+		<div class="banner">
+			<div class="bg ">
+				<article id="anim">
+					<h1>APRENDE A DIRIGIR TU PROPIA EMPRESA CON SIMPRODUCTION</h1>
+					<div class="login">
+						{% if error %}
+							<div class="error">Error de autenticación. Inserta un usuario y contraseña válidos.</div>
+						{% endif %}
+						<form action="{{ path('login_check') }}" method="post">
+							<input type="text" id="username" name="_username" class="input_username" placeholder="Nombre de usuario" value="{{ last_username }}" /><br/>
+							<input id="password" name="_password" type="password" placeholder="Contraseña" /><br/>
+							<input type="hidden" name="_target_path" value="/homepage" />
+							<div class="recuerdame">
+								<label for="remember_me">Recordar mis datos</label> 
+								<input type="checkbox" id="remember_me" name="_remember_me" />
+							</div>
+							<button class="btn2" type="submit">Acceder</button>
+						</form>								
+						<button class="btn" onclick="location.href='{{ url('registro') }}'" title="Únete a simProduction">Regístrate</button>
+
+					</div>
+				</article>  
+				<div id="anim2" class="imagen">
+					<img src="{{ asset('images/portatil.png') }}" alt="" />
+				</div> 
+			</div>
+		</div>		
+		
+		<div class="bg">
+			
+			<div class="wrap">
+				<div class="col3">
+					<img src="{{ asset('images/front-icon1.png') }}" alt="" />
+					<h3>¿Qué es simProduction?</h3>
+					Es un juego online de simulación empresarial y estrategia de producción. El objetivo es prosperar en una sociedad aprendiendo los mecanismos de dirección de la empresa.
+				</div>
+				<div class="col3">
+					<img src="{{ asset('images/front-icon2.png') }}" alt="" />
+					<h3>¿Por qué simProduction?</h3>
+					SimProduction es un proyecto propuesto por la <a href="http://blog.catedratelefonica.deusto.es/">cátedra de Telefónica - Deusto</a> y presentado como proyecto final de carrera en la Universidad de Deusto en Bilbao.
+				</div>
+				<div class="col3 last">
+					<img src="{{ asset('images/front-icon3.png') }}" alt="" />
+					<h3>Compatible y accesible online</h3>
+					Desarrollado con HTML5, CSS3, y sobre el framework de desarollo Symfony2. Es un juego accesible vía web, compatible con la mayor parte de navegadores.
+					</div>
+			</div>			
+		</div>	
+		<div class="bg">
+			<div class="footer clear">	
+				<div class="navigation">
+					<ul>
+						<li><a href="{{ url('index') }}">Inicio</a></li>
+						<li><a href="{{ url('acercaDe') }}">Acerca de</a></li>
+						<li><a href="{{ url('termsOfUse') }}">Términos de uso</a></li>
+						<li><a href="{{ url('ayuda') }}">F.A.Q.</a></li>			
+						<li class="laster"><a href="{{ url('registro') }}">Registro</a></li>			
+					</ul>
+				</div>		
+				<div class="author">Copyright © 2013, Cátedra Telefónica - Deusto</div>
+			</div>
+		</div>	
+		<script src="{{ asset('js/jquery.min.js') }}"></script>
+		<script src="{{ asset('js/html5placeholder.jquery.js') }}"></script>
+		<script>
+			$(function(){
+			  $(':input[placeholder]').placeholder();
+			});
+		</script>
+	</body>
+</html>
+
+

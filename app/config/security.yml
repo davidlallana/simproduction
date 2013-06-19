@@ -1,0 +1,29 @@
+security:
+    firewalls:
+        secured_area:
+            pattern:    ^/
+            anonymous: ~
+            form_login:
+                login_path:  /login
+                check_path:  /login_check
+                always_use_default_target_path: true
+                default_target_path: /accessControl
+            logout:
+                path:   /logout
+                target: /login
+            remember_me:
+                key: "%secret%"
+                lifetime: 604800
+    access_control:
+        - { path: ^/i/, roles: ROLE_USUARIO }
+        - { path: ^/admin/*, roles: ROLE_ADMIN }
+
+    providers:
+        usuarios:
+            entity: { class: simProduction\HomeBundle\Entity\Usuario, property: username }
+
+    encoders:
+        simProduction\HomeBundle\Entity\Usuario:
+            algorithm:   sha1
+            iterations: 1
+            encode_as_base64: false

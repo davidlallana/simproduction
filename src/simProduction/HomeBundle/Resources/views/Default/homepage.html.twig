@@ -1,0 +1,194 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+	<article class="three-fifth data-block ">
+		<div class="data-container with-header none-height ">
+			<section class="user-profile">
+				<figure>
+					<img alt="image" src="{{ asset(empresa.logo) }}" />
+					<strong>{{empresa.nombre}}</strong><br/>
+					<h1>{{ empresa.sector.nombre }}</h1>
+				</figure>
+				
+				{% if empresa.saldo>0 %}
+				<span class="azul">Saldo disponible en caja: </span><span>{{empresa.saldo| number_format(2, ',', '.')}} €</span>						
+				{% else %}
+				<span class="azul">Saldo disponible en caja: </span><span class="rojo">{{empresa.saldo| number_format(2, ',', '.')}} €</span>						
+				{% endif %}<br/>
+				<span class="azul">Stock Producción: </span>{% if empresa.sector.id==1 %}{{empresa.minerales| number_format(0, ',', '.')}} Kg{% elseif empresa.sector.id==2%}{{empresa.herramientas| number_format(0, ',', '.')}} unidades{% else %}{{empresa.vehiculos| number_format(0, ',', '.')}} unidades{% endif %}<br/>
+				{% if empresa.sector.id==1 %}
+				<span class="azul">›› Herramientas: </span>{{empresa.herramientas| number_format(0, ',', '.')}} unidades<br/>
+				<span class="azul">›› Vehículos: </span>{{empresa.vehiculos| number_format(0, ',', '.')}} unidades<br/>
+				{% elseif empresa.sector.id==2%}
+				<span class="azul">›› Minerales: </span>{{empresa.minerales| number_format(0, ',', '.')}} Kg<br/>
+				<span class="azul">›› Vehículos: </span>{{empresa.vehiculos| number_format(0, ',', '.')}} unidades<br/>
+				{% else %}
+				<span class="azul">›› Minerales: </span>{{empresa.minerales| number_format(0, ',', '.')}} Kg<br/>
+				<span class="azul">›› Herramientas: </span>{{empresa.herramientas| number_format(0, ',', '.')}} unidades<br/>
+				{% endif %}		
+			</section>						
+		</div>
+	</article>
+	<article class="two-fifth-last data-block ">
+		<div class="data-container none-height with-header">
+			{% if prestamo!=null %}							
+			<header>
+				<h2>Situación del préstamo solicitado</h2>
+			</header>
+			<strong>Cantidad solicitada: </strong>{{ prestamo.saldoSolicitado | number_format (2, ',', '.') }} € al {{ prestamo.interes }} %<br/>
+			<strong>A devolver: <span class="azul">{{ prestamo.plazosRestantes }}{% if prestamo.plazosRestantes == 1 %} PLAZO RESTANTE{% else %} PLAZOS RESTANTES{% endif %}</span></strong> de {{ prestamo.plazoDevolver | number_format (2, ',', '.') }} €<br/>
+			<strong>Próxima devolución: </strong>{{prox_pago.fecha | date("d/m/Y")}}<br/><br/>
+			{% endif %}	
+			{% if graficos!=null %}
+			<header>
+				<h2>Evolución financiera de la empresa</h2>
+			</header>			
+			<div id="chart1" class="clear"></div><br/>
+			{% endif %}	
+			<header>
+				<h2>Próximos gastos previstos</h2>				
+			</header>			
+			<table class="clear" >			
+				<tbody>							
+					{% for gasto in prox_gastos %}	
+					<tr>
+						<td><span class="azul">{% if gasto.tipo==3 %}Pago de salarios a empleados{% elseif gasto.tipo==4 %}Devolución de préstamo{% endif %}</span></td>
+						<td class="ancho50">{{ gasto.fecha | date('d/m/y') }}</td>
+						<td class="ancho75">{% if gasto.tipo==3 %}{{empresa.salarios| number_format(2, ',', '.')}}{% elseif gasto.tipo==4%}{{gasto.prestamo.plazoDevolver| number_format(2, ',', '.')}}{% endif %}</span> €</td>
+					</tr>
+					{% endfor %}						
+				</tbody>
+			</table>
+		</div>
+	</article>
+	<article class="three-fifth data-block ">
+		<div class="data-container double-height with-header ">
+			<header>
+				<h2>Nivel de desarrollo de la empresa</h2>
+			</header>
+			<section>
+				{% if formaciones!=null %}
+				La empresa <strong>{{empresa.nombre}}</strong> se encuentra actualmente en el <strong>nivel {{empresa.nivel.nivel-1}}</strong>. La función del nivel de instalaciones es de gran utilidad para 
+				la mejora y optimización de los procesos productivos de la empresa. Un incremento de nivel de instalaciones se traduce en un incremento de productividad de la empresa. Para
+				subir el nivel de la empresa a nivel {{empresa.nivel.nivel}}, tiene los siguientes requisitos:<br/><br/>
+					<table class="normal">			
+						<tbody>	
+							<tr class="normal" >
+								<td class="requisito">{% if empresa.nivel.dinero < empresa.saldo %}<img alt="image" src="{{ asset('images/ok.png') }}"/>{% else %}<img alt="image" src="{{ asset('images/error.png') }}"/>{% endif %}</td>
+								<td>Precio de construcción de las nuevas instalaciones: <strong>{{empresa.nivel.dinero | number_format(0, ',', '.')}} € </strong></td>
+							</tr>	
+							{% if empresa.sector.id == 1 %}
+							<tr class="normal" >
+								<td class="requisito">{% if empresa.nivel.herramientas <= empresa.herramientas %}<img alt="image" src="{{ asset('images/ok.png') }}"/>{% else %}<img alt="image" src="{{ asset('images/error.png') }}"/>{% endif %}</td>
+								<td>Número de herramientas: <strong>{{empresa.nivel.herramientas}}  </strong></td>
+							</tr>
+							<tr class="normal" >
+								<td class="requisito">{% if empresa.nivel.vehiculos <= empresa.vehiculos %}<img alt="image" src="{{ asset('images/ok.png') }}"/>{% else %}<img alt="image" src="{{ asset('images/error.png') }}"/>{% endif %}</td>
+								<td>Número de vehículos: <strong>{{empresa.nivel.vehiculos}}  </strong></td>
+							</tr>
+							{% elseif empresa.sector.id == 2%}		
+							<tr class="normal" >
+								<td class="requisito">{% if empresa.nivel.vehiculos <= empresa.vehiculos %}<img alt="image" src="{{ asset('images/ok.png') }}"/>{% else %}<img alt="image" src="{{ asset('images/error.png') }}"/>{% endif %}</td>
+								<td>Número de vehículos: <strong>{{empresa.nivel.vehiculos}}  </strong></td>
+							</tr>
+							{% else %}
+							<tr class="normal" >
+								<td class="requisito">{% if empresa.nivel.herramientas <= empresa.herramientas %}<img alt="image" src="{{ asset('images/ok.png') }}"/>{% else %}<img alt="image" src="{{ asset('images/error.png') }}"/>{% endif %}</td>
+								<td>Número de herramientas: <strong>{{empresa.nivel.herramientas}}  </strong></td>
+							</tr>
+							{% endif %}							
+						</tbody>
+					</table>	
+					Además, el personal de la empresa deberá cumplir las siguientes premisas:<br/><br/>
+					<table class="normal">			
+						<tbody>			
+														
+								{% for form in formaciones %}	
+								<tr class="normal">
+									<td class="requisito">{% if form.cumpleRequisito == 1 %}<img alt="image" src="{{ asset('images/ok.png') }}"/>{% else %}<img alt="image" src="{{ asset('images/error.png') }}"/>{% endif %}</td>										
+									<td>Tener contratado{% if form.numEmpleados>1 %}s {{ form.numEmpleados }} empleados cuyo perfil sea <strong>{{ form.perfilTrabajador.nombre }}</strong>
+									{% else %} {{ form.numEmpleados }} empleado cuyo perfil sea <strong>{{ form.perfilTrabajador.nombre }}</strong>{% endif %}
+									{% if form.formacion!=null %}y que tenga el <strong>{{ form.formacion.nombre }}</strong>{% endif %}</td>							
+								</tr>
+								{% endfor %}					
+									
+						</tbody>
+					</table>
+				{% if cumpleRequisitos==true %}<p><button class="btn" onclick="location.href='{{ url('subirnivel') }}'">Subir nivel</button></p>{% endif %}
+				{% else %}
+					Actualmente la empresa <strong>{{empresa.nombre}}</strong> se encuentra en el máximo nivel de desarrollo. Si deseas seguir aprendiendo, trata de mejorar la producción en este mismo nivel.<br/>
+				{% endif %}	
+			</section>
+		</div>
+	</article>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script class="code" type="text/javascript">
+        $(document).ready(function () {
+			var ingresos = [{% for graf in graficos %}["{{graf.fecha | date ('Y-m-d')}}",{{graf.saldo}}],{% endfor %}];
+			var plot1 = $.jqplot("chart1", [ingresos], {
+                seriesColors: ["rgba(30, 110, 160, 0.7)"],
+                highlighter: {
+                    show: true,
+                    sizeAdjust: 1,
+                    tooltipOffset: 4
+                },
+                grid: {
+                    background: 'rgba(57,57,57,0.0)',
+                    drawBorder: false,
+                    shadow: false,
+                    gridLineColor: '#aaa',
+                    gridLineWidth: 1
+                },				
+                seriesDefaults: {
+                    rendererOptions: {
+                        smooth: true,
+                        animation: {
+                            show: true
+                        }
+                    },
+                    showMarker: false
+                },
+                series: [
+                    {
+                        fill: true,
+                    }
+                ],
+               
+                axes: {
+                    xaxis: {
+                        renderer: $.jqplot.DateAxisRenderer,
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickOptions: {
+                            formatString: "%e %b",
+                            angle: -30,
+                            textColor: '#777'
+                        },
+                        min:"{{ '1 week ago' | date('Y-m-d') }}",
+                        max: "{{ 'now' | date('Y-m-d') }}",
+                        tickInterval: "1 day",
+                        drawMajorGridlines: true
+                    },
+                    yaxis: {
+                        pad: 1,                        
+                        tickOptions: {
+                            formatString: "%'d €",
+                            showMark: false
+                        }
+                    }
+                }
+            });
+
+              $('.jqplot-highlighter-tooltip').addClass('ui-corner-all')
+        });
+
+
+    </script>
+	<script src="{{ asset('js/jquery.jqplot.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.dateAxisRenderer.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.logAxisRenderer.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.canvasTextRenderer.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.canvasAxisTickRenderer.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.highlighter.min.js') }}"></script>
+{% endblock %}

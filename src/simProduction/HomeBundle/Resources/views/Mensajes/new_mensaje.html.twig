@@ -1,0 +1,88 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+		<article class="data-block ">
+			<div class="data-container with-header full-height">
+				<header>
+					<h2>Nuevo mensaje</h2>	
+					<div class="nav">
+						<a href="../mensajes">Bandeja de entrada</a>
+						<a href="../mensajes_enviados">Mensajes enviados</a>		
+						<a href="../show_new_mensaje/0">Nuevo mensaje</a>	
+					</div>
+				</header>		
+				<p>
+					<form id="new_mensaje" action="{{ path('new_mensaje') }}" method="post" onsubmit="return comprobarParaEnviar();" {{ form_enctype(form) }}>
+						{{ form_errors(form.destino2) }}
+						{{ form_errors(form.mensaje) }}
+						{{ form_widget(form.origen) }}
+						{{ form_widget(form.destino2, { 'attr': {'placeholder': 'Escribe aquí el destino','onBlur':'comprobarDestino()','onFocus':'borrar()'}})}}
+						<br/>
+						{{ form_widget(form.mensaje, {'attr': {'placeholder': 'Escribe aquí tu mensaje.'}})}}
+						{{ form_rest(form) }}	
+					</form><br/>
+					<button class="btn" onClick="comprobarParaEnviar();">Enviar mensaje</button>
+				</p>		 
+			</div>
+		</article>
+{% endblock %}
+{% block javascripts %}	
+{{parent()}}
+<script src="{{ asset('js/jquery-1.9.1.js') }}"></script>
+<script src="{{ asset('js/jquery-ui-1.10.1.custom.min.js') }}"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		comprobarDestino();
+	});
+	
+	$(function() {
+		var dest = new Array();		 
+		var i = 0;
+		{% for destino in destinos %}
+			dest[i]="{{destino}}";				
+			i++;					
+		{% endfor %} 
+		$("#new_mensaje_destino2").autocomplete({ source: dest });
+	});
+	
+	function comprobarDestino() {		
+		valor=document.getElementById("new_mensaje_destino2").value;
+		var ajaxURL = '../comprobarDestino/' + valor;
+		var dest = new Array();		 
+		var i = 0;
+		{% for destino in destinos %}
+			dest[i]="{{destino}}";				
+			i++;					
+		{% endfor %}
+		if(dest.indexOf(valor)>-1){	
+			document.getElementById("new_mensaje_destino2").style.background="#EFF5FB";
+			document.getElementById("new_mensaje_destino2").lang ="OK";
+		}else{
+			document.getElementById("new_mensaje_destino2").lang ="";
+			if(valor!=''){ 
+				document.getElementById("new_mensaje_destino2").style.background="#FBEFF2";
+			}	
+		}	
+	}	
+	
+	function comprobarParaEnviar() {
+		comprobarDestino();
+		if(	document.getElementById("new_mensaje_destino2").lang =="OK" ){
+			if(	document.getElementById("new_mensaje_mensaje").value =="" ){
+				var $toast = toastr['error']('Error al intentar enviar el mensaje. Comprueba el contenido del texto a enviar.', '');		
+				return false;
+			}else{
+				document.forms["new_mensaje"].submit();
+								return true;
+			}
+		} else{	
+			var $toast = toastr['error']('Error al intentar enviar el mensaje. Comprueba que el destino es correcto.', '');		
+			return false;			
+		}
+	}	
+	
+	function borrar() {			
+		document.getElementById("new_mensaje_destino2").value='';
+		document.getElementById("new_mensaje_destino2").style.background="#FFF";
+	}	
+</script>			
+{% endblock %}

@@ -1,0 +1,31 @@
+<article class="full  data-block">
+	<div class="data-container with-header double-height">		
+		<div id="curso" class="clear">
+			<header>
+				<h2>Cursos de formación para {{empleado.nombre}} {{empleado.apellidos}}</h2>
+			</header>
+			{% if cursos==null %}
+				No existen cursos de formación para este empleado
+			{% else %}	
+			<table class="normal clear sortable">			
+				<tbody >
+					<tr>
+						<th>Formación</th>
+						<th>Centro Tecnológico</th>
+						<th class="sorttable_numeric">Precio</th>
+						<th></th>
+					</tr>	
+					{% for curso in cursos %}	
+						<tr>
+							<td>{{ curso.Formacion.nombre }}</td>
+							<td>{{curso.CT.nombre}}</td>					
+							<td class="ancho125">{{curso.precio}} €</td>					
+							<td class="ancho150 derecha"><a href=# onClick="formarEmpleado({{ empleado.id }},{{ curso.id }});">Formar empleado</a></td>					
+						</tr>
+					{% endfor %}						
+				</tbody>
+			</table>
+			{% endif %}
+		</div>
+	</div>
+</article>

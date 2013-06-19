@@ -1,0 +1,17 @@
+<section class="emp-information">
+	<figure>
+		<img alt="logo" src="{{ asset(empresaVer.logo) }}" >
+		<figcaption>
+			<strong>{{empresaVer.nombre}}</strong>
+			<br/>
+			<span>Nivel de las instalaciones: {{empresaVer.nivel.nivel-1}} </span>		
+			<span class="cursiva">Número de empleados: {{numEmpleados}}</span>		
+		</figcaption>				
+		<div class="clear"></div>
+		<div class="justify">{{empresaVer.nombre}} {{empresaVer.sector.descripcion}}</div>
+		<div class="mensaje">
+			<textarea id="mensaje" placeholder="Escribe aquí tu mensaje." ></textarea>	
+			<button class="btn2 close" onClick="enviarMensaje({{empresaVer.id}});" >Enviar</button>						
+		</div>		
+	</figure>			
+</section>

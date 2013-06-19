@@ -1,0 +1,114 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+<article class="data-block">
+	<div class="data-container with-header full-height ">		
+		<header>
+			<h2>Configuración de cuenta</h2>
+		</header>	
+		<div class="bloque_imagen">
+			<h1>Modificar imagen de la empresa</h1>
+			<img src="{{ asset(empresa.logo) }}" alt="" />
+			<div class="campo">
+				<form id="logo" action="{{ path('modificarLogo') }}" method="post" {{ form_enctype(form_empresa) }}>					
+					{{ form_errors(form_empresa.logo) }}
+					{{ form_widget(form_empresa.logo, {'attr': {'placeholder': 'Nombre de la empresa','value':empresa.nombre}})}}
+					<button class="btn" type="submit">Modificar</button>
+				</form>					
+			</div>
+		</div>
+		
+
+		<div class="bloque">
+			<h1>Modificar nombre de la empresa</h1>
+			<form id="nombre" action="{{ path('modificarNombre') }}" method="post" {{ form_enctype(form_empresa) }}>					
+				{{ form_errors(form_empresa.nombre) }}
+				{{ form_widget(form_empresa.nombre, {'attr': {'placeholder': 'Nombre de la empresa','value':empresa.nombre}})}}			
+				<img class="limpiar" src="{{ asset('images/reload.png') }} " alt="" title="Limpiar" onClick="configuracion_cuenta_nombre.value='{{empresa.nombre}}'"/>
+				<button class="btn" type="submit">Modificar</button>
+			</form>	
+		</div>
+		
+		<div class="bloque">
+			<h1>Modificar email</h1>
+			<form id="email" action="{{ path('modificarEmail') }}" method="post" {{ form_enctype(form_usuario) }}>					
+				{{ form_errors(form_usuario.email) }}
+				{{ form_widget(form_usuario.email, {'attr': {'placeholder': 'Correo electrónico','value':user.email}})}}			
+				<img class="limpiar" src="{{ asset('images/reload.png') }} " alt="" title="Limpiar" onClick="registro_email.value='{{user.email}}'"/>	
+				<button class="btn" type="submit">Modificar</button>
+			</form>	
+		</div>
+		<div class="bloque">
+			<h1>Modificar contraseña</h1>
+			<input id="pass_ant" type="password" placeholder="Contraseña actual"/><br/>
+			<input id="pass_new" type="password" placeholder="Nueva contraseña"/><br/>
+			<input id="pass_news" type="password" placeholder="Repite la nueva contraseña"/>
+			<img class="limpiar" src="{{ asset('images/reload.png') }} " alt="" title="Limpiar" onClick="pass_ant.value=''; pass_new.value=''; pass_news.value='' "/>
+			<button class="btn" onClick="modificarPass(pass_ant.value,pass_new.value,pass_news.value);">Modificar</button>
+		</div>		
+		<div class="aceptacion">	
+			<form id="aceptacion" action="{{ path('guardarAceptacion') }}" method="post" {{ form_enctype(form_autorizacion) }}>					
+				{{ form_errors(form_autorizacion) }}
+				{{ form_widget(form_autorizacion.aceptacion)}}
+				Autorizo que se utilice mi empresa para su estudio<br/>				
+				<button class="btn" type="submit">Guardar</button>
+			</form>	
+		</div>	
+	</div>
+</article>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+	function guardarAceptacion(acepto) {
+		alert(acepto);
+		var ajaxURL = 'guardarAceptacion/' + acepto;
+		jQuery.ajax({	
+			url: ajaxURL,
+			dataType: 'html',
+			success: function(data){
+			alert(data);
+				if(data=="OK"){
+					var $toast = toastr['success']('La contraseña se ha modificado correctamente', '');			
+				} 					
+			}
+		})			
+	}
+	
+	function modificarPass(pass_ant,pass_new,pass_news) {	
+		if(pass_ant=='' | pass_new=='' |pass_news==''){
+			var $toast = toastr['error']('Debes rellenar todos los campos para modificar la contraseña', '');	
+		}else {
+			if(pass_new != pass_news){
+				var $toast = toastr['error']('Debes repetir la contraseña correctamente', '');	
+				document.getElementById('pass_ant').value=''; 
+				document.getElementById('pass_new').value=''; 
+				document.getElementById('pass_news').value='';
+			}else{	
+				if(pass_new.length<8){
+					var $toast = toastr['error']('La contraseña nueva debe tener al menos 8 caracteres', '');
+				document.getElementById('pass_ant').value=''; 
+				document.getElementById('pass_new').value='';
+				document.getElementById('pass_news').value='';
+				}else{					
+					var ajaxURL = 'modificarPass/' + pass_ant + '/' +pass_new;
+					jQuery.ajax({	
+						url: ajaxURL,
+						dataType: 'html',
+						success: function(data){
+							if(data=="OK"){
+								var $toast = toastr['success']('La contraseña se ha modificado correctamente', '');			
+							} else{
+								var $toast = toastr['error']('La contraseña actual no es correcta', '');
+								document.getElementById('pass_ant').value=''; 
+								document.getElementById('pass_new').value=''; 
+								document.getElementById('pass_news').value='';
+							}
+						}
+					})			
+				}
+			}	
+		}	
+	}	
+</script>	
+{% endblock %}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+	<title>SimProduction</title>
+	{% block stylesheets %}
+		<link href="{{ asset('css/jquery.jqplot.min.css') }}" type="text/css" rel="stylesheet" />
+		<link href="{{ asset('css/modal.css') }}" type="text/css" rel="stylesheet" />
+		<link href="{{ asset('css/style2.css') }}" type="text/css" rel="stylesheet" />
+		<link href="{{ asset('css/toastr.css') }}" type="text/css" rel="stylesheet" />
+		<link href="{{ asset('css/jquery.ui.css') }}" type="text/css" rel="stylesheet" />		
+		<link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
+	{% endblock %}
+</head>
+<body>
+	<header id="header">
+		<div class="bg">
+			<a href="homepage"><span class="site_title"></span></a>		
+			<div class="informacion">			
+				<div class="mensajes_info">			
+					{% if num_mensajes>0 %}<img alt="" src="{{ asset('images/mail.png') }}" onclick="location.href='{{ url('mensajes') }}'" title="Leer mensajes" />
+					<span class="num_mensaje" onclick="location.href='{{ url('mensajes') }}'">{{num_mensajes}}</span>{% endif %}
+				</div>			
+				<div class="cuenta">
+					<img src="{{ asset(empresa.logo) }}" alt="" onclick="location.href='{{ url('cuenta') }}'" title="Configurar cuenta" />
+					<div class="texto">
+						<h5>Bienvenido, {{user}}</h5><br/>
+						<a href="{{ url('logout') }}" title="Cerrar sesión">Cerrar sesión</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>	
+	
+	<aside id="sidebar">
+		<ul class="ca-menu">
+			<li onclick="location.href='{{ url('homepage') }}'">
+				<div class="ca-content">
+					<img src="{{ asset('images/home.png') }}" alt=""/>
+					<h2>INICIO</h2>
+				</div>				
+			</li>
+			<li onclick="location.href='{{ url('mapa') }}'">
+				<div class="ca-content">
+					<img src="{{ asset('images/mapa2.png') }}" alt=""/>
+					<h2>MAPA</h2>
+				</div>
+			</li>
+			<li onclick="location.href='{{ url('banco') }}'">
+				<div class="ca-content">
+					<img src="{{ asset('images/banco.png') }}" alt=""/>
+					<h2>BANCO</h2>
+				</div>
+			</li>
+			<li onclick="location.href='{{ url('personal') }}'">
+				<div class="ca-content">
+					<img src="{{ asset('images/personal.png') }}" alt=""/>
+					<h2>PERSONAL</h2>
+				</div>
+			</li>
+			<li onclick="location.href='{{ url('ventas') }}'">
+				<div class="ca-content">
+					<img src="{{ asset('images/ventas.png') }}" alt=""/>
+					<h2>VENTAS</h2>
+				</div>
+			</li>
+			<li onclick="location.href='{{ url('compras') }}'">
+				<div class="ca-content">
+					<img src="{{ asset('images/compras.png') }}" alt=""/>
+					<h2>COMPRAS</h2>
+				</div>
+			</li>
+			<li onclick="location.href='{{ url('mensajes') }}'">
+				<div class="ca-content">
+					<img src="{{ asset('images/mensajes.png') }}" alt=""/>
+					<h2>MENSAJES</h2>
+				</div>
+			</li>
+		</ul>
+	</aside>
+	<section id="main">
+		<div class="bg">
+			{% block body %}{% endblock %}
+		</div>
+	</section>
+{% block javascripts %}
+<script src="{{ asset('js/jquery-1.9.1.js') }}"></script>
+<script src="{{ asset('js/jquery-ui-1.10.1.custom.min.js') }}"></script>	
+<script src="{{ asset('js/jquery.min.js') }}"></script>
+<script src="{{ asset('js/toastr.js') }}"></script>
+<script src="{{ asset('js/jquery.nicescroll.js') }}"></script>	
+<script src="{{ asset('js/sorttable.js') }}"></script>
+<script src="{{ asset('js/html5placeholder.jquery.js') }}"></script>
+<script src="{{ asset('js/jquery.reveal.js') }}"></script>	
+<!--[if lt IE 9]><script src="{{ asset('js/excanvas.js') }}"></script><![endif]-->
+
+{% endblock %}
+</body>
+</html>

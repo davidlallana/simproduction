@@ -1,0 +1,57 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+{% for key, flash in app.session.getFlashes() %}
+<span id="{{flash}}"></span>
+{% endfor %}
+<article class="data-block ">
+		<div class="data-container with-header full-height">
+			<header>
+				<h2>Mensajes recibidos</h2>
+				<div class="nav">
+					<a href="mensajes">Bandeja de entrada</a>
+					<a href="mensajes_enviados">Mensajes enviados</a>		
+					<a href="show_new_mensaje/0">Nuevo mensaje</a>	
+				</div>
+			</header>			
+			<div class="clear" id="boxscroll">
+				<table>			
+					<tbody>			
+						{% if mensajes_recibidos==null %}
+						<p>No tienes mensajes recibidos</p>
+						{% else %}
+							{% for mensaje in mensajes_recibidos %}	
+							{% if mensaje.leido==0 %}<tr class="sinleer" onclick="location.href='mensaje/{{mensaje.id}}'">{% else %}<tr onclick="location.href='mensaje/{{mensaje.id}}'">{% endif %}
+								<td class="imagenOrigen"><img src="{{ asset(mensaje.origen.logo) }}" alt=""></td>
+								<td><span class="name">{{ mensaje.origen }}</span><br/><span class="textomensaje">{{ mensaje.mensaje }}</span></td>
+								<td class="date">{{ mensaje.fecha | date('d') }} de {{ mensaje.fecha | date('F') }}  a las {{ mensaje.fecha | date('H:m') }}</td>
+							</tr>
+							{% endfor %}						
+						{% endif %}						
+					</tbody>
+				</table>
+			</div>		 
+		</div>		 
+</article>
+{% endblock %}
+{% block javascripts %}
+{{	parent() }}
+<script type="text/javascript">	
+	(function($){
+		$(borrado).ready(function(){			
+			var $toast = toastr['info']('El mensaje se ha borrado correctamente.', '');
+		});	
+	})(jQuery);
+</script>
+<script type="text/javascript">	
+	(function($){
+		$(errorBorrado).ready(function(){			
+			var $toast = toastr['error']('Error al intentar borrar el mensaje.', '');
+		});	
+	})(jQuery);
+</script>
+<script>
+  $(document).ready(function() {		  
+	$("#boxscroll").niceScroll({touchbehavior:true});	  
+  });
+</script>
+{% endblock %}

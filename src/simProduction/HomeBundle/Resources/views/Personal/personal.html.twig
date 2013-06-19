@@ -1,0 +1,246 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+{% for key, flash in app.session.getFlashes() %}
+		<span id="{{flash}}"></span>
+{% endfor %}
+
+<article class="half  data-block">
+	<div class="data-container with-header double-height">
+		<header>
+			<h2>Personal contratado</h2>
+			<div class="nav">
+				<a href="#" onClick="mostrarContratar();">Contratar nuevo empleado</a>
+			</div>
+		</header>	
+		{% if empleados==null %}
+			<p>No tienes ningún empleado contratado</p>
+		{% else %}		
+		<div class="clear">
+			<div class="enlacesEmpleados">
+				<div id="empleados">
+					<span class="little">Total empleados contratados: {{total}}<a href="#" onClick="mostrarEmpleados('0');"> ››</a></span><br/>
+					{% for perfil in perfiles %}	
+						<span class="little">&emsp;- {{ perfil.salarioBase }} {{ perfil.nombre }}<a href="#" onClick="mostrarEmpleados('{{perfil.id}}');"> ››</a></span><br/>
+					{% endfor %}			
+				</div>
+			</div>
+			<div id="empleados2">
+				<div id="boxscroll2" class="listaEmpleados">
+					<table>			
+						<tbody >	
+							{% for emp in empleados %}	
+								<tr onClick="marcar('{{emp.id }}');">
+									<td>{{ emp.nombre }} {{ emp.apellidos }}</td>
+								</tr>
+							{% endfor %}						
+						</tbody>
+					</table>		
+				</div>
+			</div>
+		</div>
+		{% endif %}	
+	</div>
+</article>
+<div id="formaciones">
+	<article class="half-last  data-block">
+		<div class="data-container double-height">
+			<div id="formacion" class="clear">
+				<img src="{{ asset('images/users.png') }}" class="background" alt=""/>
+			</div>
+		</div>
+	</article>
+</div>
+
+<div id="cursos">
+	<article class="data-block">
+		<div class="data-container double-height">	
+			<div id="curso" class="clear">
+			</div>		
+		</div>
+	</article>
+</div>
+
+<div class="modal" id="cont">	
+	<span class="cerrar close" >x</span>
+	<div class="heading">
+		<div class="titulo">Contratar nuevo empleado</div>
+	</div>
+	<div class="content content2">
+		<div class="pregunta">
+			<span>Selecciona el perfil que deseas contratar:</span>
+			<form {{ form_enctype(form) }}>
+				{{ form_errors(form.perfilTrabajador) }}				
+				{{ form_widget(form.perfilTrabajador) }}				
+			</form>		
+			<button class="btn2 close" onClick="contratar();">Contratar</button>
+		</div>
+	</div>
+	<div class="buttons"></div>
+</div>
+
+<div class="modal" id="modal">
+	<div class="heading" id="heading">
+		<div class="titulo" id="titulo"></div>
+	</div>
+	<div class="content content2" id="content">
+		<div class="pregunta" id="pregunta"></div>
+	</div>
+	<div class="buttons" id="buttons"></div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+	{{	parent() }}
+	<script>	
+		function mostrarContratar()	{			
+			document.getElementById("heading").innerHTML ="Contratar nuevo empleado";
+			document.getElementById("buttons").innerHTML ='<button class="btn2 close" onClick="contratar();">Contratar</button>';
+			$('#cont').reveal({
+				animation: 'fade',     
+				animationspeed: 400,       
+				closeonbackgroundclick: false,      
+				dismissmodalclass: 'close' 
+			});
+		}
+		
+		function contratar() {			
+			emp=document.getElementById("trabajador_perfilTrabajador").value;
+			var ajaxURL = 'nuevo_empleado/' + emp;	
+			jQuery.ajax({	
+                url: ajaxURL,
+                dataType: 'html',
+				success: function(data){					
+					recargarEmpleados();
+					var $toast = toastr['success']('La contratación se ha realizado con éxito. <strong>'+data+'</strong> se ha incorporado a tu equipo.', '');
+					mostrarEmpleados(emp);
+				}
+            })		
+		}	
+		
+		function marcar(emp) {		
+			var ajaxURL = 'formacion/' + emp;
+			var ajaxURL2 = 'cursos/' + emp;			
+			jQuery.ajax({	
+                url: ajaxURL2,
+                dataType: 'html',
+				beforeSend: function(){
+					$("div#curso").empty();
+					$("div#curso").append('<img src="{{ asset('images/loading.gif') }}" class="loading" alt=""/>'); 
+				},
+				success: function(data){
+					$("div#cursos").empty();
+					$("div#cursos").append(data); 
+				}    
+            })	
+			jQuery.ajax({	
+                url: ajaxURL,
+                dataType: 'html',
+				beforeSend: function(){
+					$("div#formacion").empty();
+					$("div#formacion").append('<img src="{{ asset('images/loading.gif') }}" class="loading" alt=""/>'); 
+				},
+				success: function(data){
+					$("div#formaciones").empty();
+					$("div#formaciones").append(data); 
+				}    
+            })			
+		}	
+		
+		function mostrarEmpleados(idPerfil)	{
+			var ajaxURL = 'mostrarEmpleados/' + idPerfil;
+			jQuery.ajax({	
+                url: ajaxURL,
+                dataType: 'html',
+				beforeSend: function(){
+					$("div#empleados2").empty();
+					$("div#empleados2").append('<img src="{{ asset('images/loading.gif') }}" class="loading" alt=""/>'); 
+				},
+				success: function(data){
+					$("div#empleados2").empty();
+					$("div#empleados2").append(data); 
+				}    
+            })			
+		}	
+		
+		function formarEmpleado(idEmpleado,idCurso)	{
+			var ajaxURL = 'formarEmpleado/' + idEmpleado +'/'+idCurso;
+			jQuery.ajax({	
+                url: ajaxURL,
+                dataType: 'html',
+				success: function(data){
+					if(data=='OK'){		
+						marcar(idEmpleado);
+						var $toast = toastr['success']('Has formado a un empleado en un curso con éxito. Su salario ha aumentado.', '');
+					}else if(data=='ERROR!'){
+						var $toast = toastr['warning']('No tienes dinero suficiente para formar el empleado.', '');		
+					}else {
+						var $toast = toastr['error']('Error al formar al empleado.', '');			
+					}	
+				}    
+            })			
+		}	
+		
+		function despedirEmpleado(idEmpleado,empleado,idPerfil)	{
+			var ajaxURL = 'calcularFiniquito/' + idEmpleado;
+			
+			jQuery.ajax({	
+				url: ajaxURL,
+				dataType: 'html',
+				success: function(data){	
+					if(data=='No puedes despedir a este empleado. Es necesario para estar en este nivel.'){								
+						var $toast = toastr['error'](data, '');	
+						recargarEmpleados();
+					}else{	
+						document.getElementById("heading").innerHTML ="Confirmación de despido";
+						document.getElementById("pregunta").innerHTML =data;
+						document.getElementById("buttons").innerHTML ='<button class="btn2 close" onClick="despedir('+ idEmpleado +','+ idPerfil +');">Sí</button><button class="btn2 close">No</button>';
+						$('#modal').reveal({
+							animation: 'fade',     
+							animationspeed: 400,       
+							closeonbackgroundclick: false,      
+							dismissmodalclass: 'close' 
+						});							
+					}    
+				}  
+			})	
+		}	
+		
+		function despedir(emp,idPerfil) {
+			var ajaxURL = 'despedirEmpleado/' + emp;
+			jQuery.ajax({	
+				url: ajaxURL,
+				dataType: 'html',
+				success: function(data){
+					recargarEmpleados();
+					var $toast = toastr['success'](data, '');	
+					mostrarEmpleados(idPerfil);					
+				}    
+			})	
+		}
+		
+		function recargarEmpleados() {
+			$("div#empleados").empty();
+			$("div#curso").empty();
+			$("div#formacion").empty();
+			$("div#formacion").append('<img src="{{ asset('images/users.png') }}" class="background" alt=""/>');
+			var ajaxURL = 'recargarEmpleados';
+			jQuery.ajax({	
+                url: ajaxURL,
+                dataType: 'html',
+				beforeSend: function(){
+					$("div#empleados").empty();
+					$("div#empleados").append('<img src="{{ asset('images/loading.gif') }}" class="loading" alt=""/>'); 
+				},
+				success: function(data){
+					$("div#empleados").empty();
+					$("div#empleados").append(data); 			
+				}    
+            })		
+		}	
+	</script>	
+	<script>
+	  $(document).ready(function() {		  
+		$("#boxscroll2").niceScroll({touchbehavior:true});	  
+	  });
+	</script>	
+{% endblock %}

@@ -1,0 +1,20 @@
+<table class="normal">			
+	<tbody>			
+		{% if lotes==null %}
+		<p>No has añadido ningún lote todavía</p>
+		{% else %}
+		<tr>
+			<th>Cantidad</th>
+			<th>Precio</th>
+			<th></th>
+		</tr>
+		{% for lote in lotes %}	
+		<tr>
+			<td>{{ lote.cantidad }} {{lote.sector.producto}}</td>
+			<td class="ancho100">{{ lote.precio }} €</td>
+			<td class="ancho125"><a href=# onClick="confirmar(2,{{lote.id}});" title="Borrar lote">Borrar lote</a></td>
+		</tr>
+		{% endfor %}						
+		{% endif %}						
+	</tbody>
+</table>		

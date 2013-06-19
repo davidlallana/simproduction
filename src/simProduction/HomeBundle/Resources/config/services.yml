@@ -1,0 +1,7 @@
+parameters:
+#    sim_production_home.example.class: simProduction\HomeBundle\Example
+
+services:
+#    sim_production_home.example:
+#        class: %sim_production_home.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

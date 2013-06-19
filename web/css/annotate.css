@@ -1,0 +1,168 @@
+@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700);
+
+.annotated{
+	font: normal 13px PT Sans,Arial;
+	position:relative;
+	display:block;
+	background: url(../images/map.png) no-repeat;
+	width:900px;
+	height:440px;
+	margin-top:40px;	
+	margin-left:25px;	
+	margin-bottom:40px;	
+	-webkit-border-radius: 3px; /* Saf3+, Chrome */
+	border-radius: 3px; /* Opera 10.5, IE 9 */
+	-moz-border-radius: 3px;/* Disabled for FF1+ */
+}
+
+.annotations > li a{
+	display: block;
+	width:32px;
+	height:32px;
+}
+
+
+.annotations > li{
+	list-style-type:none;
+	position:absolute;
+	width:32px;
+	height:32px;
+}
+
+.annotations li span img{
+	width:50px;
+	height:50px;
+	margin:0px 10px 0px 0px;
+	float:left;
+}
+.annotations li span{
+	width: 210px;
+	height: auto;
+	line-height: 20px;
+	left: 50%;
+	padding-right:10px;
+	margin-left: -115px;
+	font-weight: 400;	
+	font-size: 14px;
+	color: #3783B2;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	border: 4px solid #fff;
+	background: #fff;
+	z-index: 999999;
+	border-radius: 5px;
+	position: absolute;
+	pointer-events: none;
+	bottom: 20px;
+	opacity: 0;
+	box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+	
+}
+.annotationss li a span:before,
+.annotations li a span:after{
+	content: '';
+	position: absolute;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid rgba(0,0,0,0.1);
+}
+.annotations li a span:after{
+	bottom: -13px;
+	margin-left: -10px;
+	border-top: 10px solid #fff;
+}
+.annotations li a:hover span{
+	opacity: 0.9;
+	bottom: 60px;
+}
+
+
+.miempresa { 
+	background: url(../images/poi_me.png) no-repeat;
+	width:47px!important;
+	height:47px!important;
+}
+.sector1 { 
+	background: url(../images/poi1.png) no-repeat;
+	cursor:pointer;
+	z-index:1;
+}
+
+.sector2 { 
+	background: url(../images/poi2.png) no-repeat;
+	cursor:pointer;
+	z-index:1;
+}
+
+.sector3 { 
+	background: url(../images/poi.png) no-repeat;
+	cursor:pointer;
+	z-index:1;
+}
+
+.centroTec { 
+	background: url(../images/CT.png) no-repeat;
+	z-index:1;
+}
+
+.emp-information figure {
+	width:100%;
+	margin-top:-5px;
+	margin-bottom:40px;
+	margin-left:0px;
+	color:#444;
+	font-size:12px;
+}
+
+.emp-information figure img {		
+	float: left;	
+	width:50px;
+	height:50px;
+	margin-right: 15px;
+}
+
+.emp-information figure figcaption strong {
+	position:relative;
+	float:left;
+	color:#333;
+	line-height: 16px;
+	font-size:16px;
+}
+
+.emp-information figure figcaption span {
+	position:relative;
+	display:block;
+}
+
+.emp-information button {
+	position:relative !important;
+	margin-right:0px!important;
+	margin-top:-45px!important;
+}
+
+.emp-information .mensaje {
+	margin-top:15px;
+	margin-bottom:60px;
+}
+
+
+.emp-information textarea {
+	height:80px;
+	margin-top:20px;
+	margin-bottom:55px;
+	width:500px;
+	border-color:#ccc;
+}
+
+.emp-information .clear {
+	margin-bottom:15px;
+}
+

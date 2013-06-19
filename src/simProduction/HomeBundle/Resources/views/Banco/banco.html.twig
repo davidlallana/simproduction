@@ -1,0 +1,250 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+<article class="data-block ">
+	<div class="data-container with-header double-height " >
+		<header>
+			<h2>Evolución financiera de la empresa</h2>
+		</header>
+		<div id="chart1" class="clear"></div><br/>
+	</div>
+</article>
+<article class="three-fifth data-block ">
+	<div class="data-container with-header full-height " >
+		<header>
+			<h2>Movimientos financieros</h2>
+		</header>
+		{% if movimientos == null %}
+			No tienes ningún movimiento financiero
+		{% else %}
+			<div class="clear" id="boxscroll">
+				<table class="normal sortable">
+					<thead>
+						<tr>
+							<th>Fecha</th>
+							<th>Descripción</th>
+							<th class="sorttable_numeric">Operación</th>
+							<th class="sorttable_numeric">Resultado</th>
+						</tr>	
+					</thead>
+					<tbody>							
+						{% for movimiento in movimientos %}						
+							<tr class="normal" >
+								<td>{{ movimiento.fecha | date('d/m') }}</td>
+								<td>{{ movimiento.motivo }}</td>
+								<td>{% if movimiento.operacion>0 %}+{% endif %}{{ movimiento.operacion| number_format(2, ',', '.') }} €</td>
+								<td>{{ movimiento.saldo| number_format(2, ',', '.')}} €</td>
+							</tr>
+						{% endfor %}					
+					</tbody>
+				</table>
+			</div>
+			<br/>
+		{% endif %}
+	</div>
+</article>
+{% if prestamo != null %}
+<article class="two-fifth-last data-block ">
+	<div class="data-container with-header none-height ">
+		<header>
+			<h2>Estado del préstamo solicitado</h2>
+		</header>
+		<strong>Cantidad solicitada: </strong>{{ prestamo.saldoSolicitado | number_format (2, ',', '.') }} € al {{ prestamo.interes }} %<br/>
+			<strong>A devolver: <span class="azul">{{ prestamo.plazosRestantes }}{% if prestamo.plazosRestantes == 1 %} PLAZO RESTANTE{% else %} PLAZOS RESTANTES{% endif %}</span></strong> de {{ prestamo.plazoDevolver | number_format (2, ',', '.') }} €<br/>
+			<strong>Próxima devolución: </strong>{% if prox_pago!=null %}{{prox_pago.fecha | date("d/m/y")}}{%endif%}<br/><br/>
+			<br/>
+	</div>
+</article>
+{% else %}
+
+<article class="two-fifth-last data-block ">
+	<div class="data-container with-header none-height ">
+		<header>
+			<h2>Solicitar préstamo bancario</h2>
+		</header>
+		<form id="prestamo" action="{{ path('prestamo') }}" method="post" onsubmit="return confirmarSolicitud();" {{ form_enctype(form) }}>
+			La empresa <b>{{empresa}}</b> solicita al banco central que le conceda un préstamo con las siguientes características:<br/>	<br/>		
+			<b>Importe:</b> 
+			{{ form_widget(form.saldoSolicitado,{'attr': {'onChange':'multiplicar2();'}})}}<br/>
+			<b>Plazos de amortización:</b> 
+			{{ form_widget(form.plazos_restantes,{'attr': {'onChange':'multiplicar();'}})}} <br/>
+			<b>Tipo de interés %:</b> 
+			{{ form_widget(form.interes)}}<br/> 
+			<b>Cuota de devolución:</b>
+			<input id="mensual" disabled="disabled"><br/>
+			<b>Total a devolver:</b> 
+			{{ form_widget(form.totalDevolver)}}
+			{{ form_rest(form) }}<br/><br/>							
+		</form>			
+		<button class="btn right" onClick="confirmarSolicitud();">Solicitar préstamo</button>
+	</div>
+</article>
+{% endif %}
+{% if prestamos !=null%}
+<article class="two-fifth-last data-block ">
+	<div class="data-container with-header min-height ">
+		<header>
+			<h2>Histórico de préstamos</h2>
+		</header>
+		<div id="boxscroll3">
+			<table>			
+				<tbody >	
+					{% for prestamo in prestamos %}	
+						<tr>
+							<td>{{ prestamo.saldoSolicitado | number_format (2, ',', '.') }} €</td>
+							<td>{{ prestamo.interes }} %</td>
+							<td>{% if prestamo.estado == 1 %}<span class="azul"><strong>{{ prestamo.plazosRestantes }}{% if prestamo.plazosRestantes == 1 %} PLAZO RESTANTE{% else %} PLAZOS RESTANTES{% endif %}</strong></span>{% else %}<span class="verde">DEVUELTO</span>{% endif %}</td>
+						</tr>
+					{% endfor %}						
+				</tbody>
+			</table>		
+		</div>	
+	</div>
+</article>
+{% endif %}
+
+<div class="modal" id="modal">
+	<div class="heading" id="heading">
+		<div class="titulo" id="titulo"></div>
+	</div>
+	<div class="content content2" id="content">
+		<div class="pregunta" id="pregunta"></div>
+	</div>
+	<div class="buttons" id="buttons"></div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+	function confirmarSolicitud()	{			
+		document.getElementById("heading").innerHTML ="Solicitud de préstamo";
+		document.getElementById("pregunta").innerHTML ="¿Estás seguro de que deseas solicitar este préstamo? ";
+		document.getElementById("buttons").innerHTML ='<button class="btn2 close" onClick="enviarSolicitud();">Sí</button><button class="btn2 close">No</button>';
+		$('#modal').reveal({
+			animation: 'fade',     
+			animationspeed: 400,       
+			closeonbackgroundclick: false,      
+			dismissmodalclass: 'close' 
+		});
+	}
+	
+	function enviarSolicitud() {			
+		document.forms["prestamo"].submit();
+		return true;
+	}	
+	
+	function multiplicar(){		
+		m3 = parseInt(document.getElementById("prestamo_plazos_restantes").value);
+		if(m3>20){
+			document.getElementById("prestamo_plazos_restantes").value=20;
+			m3=20;
+		}else if(m3<1) {
+			m3=1;
+			document.getElementById("prestamo_plazos_restantes").value=m3;
+			document.getElementById("prestamo_totalDevolver").value = m3;		
+		}		
+			m2 = parseFloat(document.getElementById("prestamo_interes").value);
+			m1 = parseFloat(document.getElementById("prestamo_saldoSolicitado").value);
+			interes=({{ app.session.get('interes') }}+(m3/100)).toFixed(2);
+			r = ((m1/m3)+((m1/m3)*(interes)/100)).toFixed(2);
+			document.getElementById("prestamo_interes").value =interes;
+			document.getElementById("mensual").value =r;
+			document.getElementById("prestamo_totalDevolver").value = (r*m3).toFixed(2);	
+		
+	}
+	
+	function multiplicar2(){		
+		m1 = parseInt(document.getElementById("prestamo_saldoSolicitado").value);
+		if(m1>({{capital_banco}}*0.15).toFixed(0)){
+			document.getElementById("prestamo_saldoSolicitado").value=({{capital_banco}}*0.15).toFixed(0);
+			m1=({{capital_banco}}*0.15).toFixed(0);
+		}else if(m1<0) {
+			m1=0;
+			document.getElementById("prestamo_saldoSolicitado").value=m1;
+			document.getElementById("prestamo_totalDevolver").value = m1;
+		}		
+			m2 = parseFloat(document.getElementById("prestamo_interes").value);
+			m3 = parseFloat(document.getElementById("prestamo_plazos_restantes").value);
+			interes=({{ app.session.get('interes') }}+(m3/100)).toFixed(2);
+			r = ((m1/m3)+((m1/m3)*(interes)/100)).toFixed(2);
+			document.getElementById("prestamo_interes").value =interes;
+			document.getElementById("mensual").value =r;
+			document.getElementById("prestamo_totalDevolver").value = (r*m3).toFixed(2);	
+		
+	}
+</script>
+{{ parent() }}
+<script>
+  $(document).ready(function() {		  
+	$("#boxscroll").niceScroll({touchbehavior:true});	  
+	$("#boxscroll3").niceScroll({touchbehavior:true});	  
+  });
+</script>
+<script class="code" type="text/javascript">
+        $(document).ready(function () {
+			var ingresos = [{% for graf in graficos %}["{{graf.fecha | date ('Y-m-d')}}",{{graf.saldo}}],{% endfor %}];
+			var plot1 = $.jqplot("chart1", [ingresos], {
+                seriesColors: ["rgba(30, 110, 160, 0.7)"],
+                highlighter: {
+                    show: true,
+                    sizeAdjust: 1,
+                    tooltipOffset: 4
+                },
+                grid: {
+                    background: 'rgba(57,57,57,0.0)',
+                    drawBorder: false,
+                    shadow: false,
+                    gridLineColor: '#aaa',
+                    gridLineWidth: 1
+                },				
+                seriesDefaults: {
+                    rendererOptions: {
+                        smooth: true,
+                        animation: {
+                            show: true
+                        }
+                    },
+                    showMarker: false
+                },
+                series: [
+                    {
+                        fill: true,
+                    }
+                ],
+               
+                axes: {
+                    xaxis: {
+                        renderer: $.jqplot.DateAxisRenderer,
+                        tickRenderer: $.jqplot.CanvasAxisTickRenderer,
+                        tickOptions: {
+                            formatString: "%e %b",
+                            angle: 0,
+                            textColor: '#777'
+                        },
+                        min:"{{ '13 weeks ago' | date('Y-m-d') }}",
+                        max: "{{ 'now' | date('Y-m-d') }}",
+                        tickInterval: "1 week",
+                        drawMajorGridlines: true
+                    },
+                    yaxis: {
+                        pad: 1,                        
+                        tickOptions: {
+                            formatString: "%'d €",
+                            showMark: false
+                        }
+                    }
+                }
+            });
+
+              $('.jqplot-highlighter-tooltip').addClass('ui-corner-all')
+        });
+
+
+    </script>
+	<script src="{{ asset('js/jquery.jqplot.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.dateAxisRenderer.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.logAxisRenderer.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.canvasTextRenderer.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.canvasAxisTickRenderer.min.js') }}"></script>
+	<script src="{{ asset('js/graph/jqplot.highlighter.min.js') }}"></script>
+{% endblock %}

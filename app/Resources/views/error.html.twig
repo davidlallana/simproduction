@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es"> 
+<head> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<title>Página de error - SimProduction</title>
+		<link href="{{ asset('css/login2.css') }}" type="text/css" rel="stylesheet" />
+	    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
+    </head>
+    <body>		
+		<div class="header ">
+			<div class="bg">
+				<div class="logo"> 
+					<a href="login"><img src="{{ asset('images/logo.png') }}" alt="logo"/></a>
+				</div>
+			</div>
+		</div>	
+		<div class="bg">
+			<div class="errorPage">
+				{% block body %}{% endblock %}
+			</div>
+			<div class="footer clear">	
+				<div class="navigation">
+					<ul>
+						<li><a href="{{ url('index') }}">Inicio</a></li>
+						<li><a href="{{ url('acercaDe') }}">Acerca de</a></li>
+						<li><a href="{{ url('termsOfUse') }}">Términos de uso</a></li>
+						<li><a href="{{ url('ayuda') }}">F.A.Q.</a></li>			
+						<li class="laster"><a href="{{ url('registro') }}">Registro</a></li>			
+					</ul>
+				</div>		
+				<div class="author">Copyright © 2013, Cátedra Telefónica - Deusto</div>
+			</div>
+		</div>
+    </body>
+</html>
+
+

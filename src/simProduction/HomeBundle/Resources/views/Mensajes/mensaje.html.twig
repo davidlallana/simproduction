@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+<article class="data-block ">
+	<div class="data-container with-header full-height">
+		<header>
+			<h2>Mensaje de {{mensaje.origen}}</h2>
+			<div class="nav">	
+				<a href="../borrarMensaje2/{{mensaje.id}}" title="Eliminar" ><img src="{{ asset('images/delete.png') }} " alt="" /></a>		
+				<a href="../show_new_mensaje/{{mensaje.origen.id}}" title="Responder" ><img src="{{ asset('images/reply.png') }} " alt="" /></a>	
+				<a href="../mensajes" title="Volver" ><img src="{{ asset('images/return.png') }}" alt="" /></a>
+			</div>
+		</header>
+		<div class="mensaje">
+			<img alt="" src="{{ asset(mensaje.origen.logo) }}" />
+			<strong>De: </strong>{{mensaje.origen}}<br/>
+			<strong>Para: </strong>{{mensaje.destino}}<br/>
+			<strong>Recibido el </strong>{{ mensaje.fecha | date('d') }} de {{ mensaje.fecha | date('F') }} a las {{ mensaje.fecha | date('H:m') }}
+		</div>
+		{{mensaje.mensaje}}
+	</div>
+</article>
+{% endblock %}

@@ -1,0 +1,34 @@
+# Bootstrap
+<<<<<<< HEAD
+/app/bootstrap*
+
+# Symfony directories
+/vendor/*
+*/logs/*
+*/cache/*
+/web/uploads/*
+/web/bundles/*
+/web/uploads/imagenes/*
+
+# Configuration files
+/app/config/parameters.ini
+/app/config/parameters.yml
+
+# Otros
+*.rar
+*~
+*/Thumbs.db
+=======
+app/bootstrap*
+
+# Symfony directories
+vendor/*
+*/logs/*
+*/cache/*
+web/uploads/*
+web/bundles/*
+
+# Configuration files
+app/config/parameters.ini
+app/config/parameters.yml
+>>>>>>> 47a4278ce6b2b2f3e0af463ad74b32ed6871eb45

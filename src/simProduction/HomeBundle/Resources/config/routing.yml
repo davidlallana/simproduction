@@ -1,0 +1,258 @@
+index:
+    pattern:  /index
+    defaults: { _controller: simProductionHomeBundle:Default:index }
+
+login:
+    pattern:  /login
+    defaults: { _controller: simProductionHomeBundle:Default:login }
+
+login_check:
+    pattern:  /login_check
+
+registro:
+    pattern:  /registro
+    defaults: { _controller: simProductionHomeBundle:Default:registro }
+    requirements:
+        _method:  GET|POST
+
+acercaDe:
+    pattern:  /about
+    defaults: { _controller: simProductionHomeBundle:Default:about }
+
+termsOfUse:
+    pattern:  /termsofuse
+    defaults: { _controller: simProductionHomeBundle:Default:termsofuse }
+
+ayuda:
+    pattern:  /help
+    defaults: { _controller: simProductionHomeBundle:Default:help }
+
+configuracion_cuenta:
+    pattern:  /i/configuracion_cuenta
+    defaults: { _controller: simProductionHomeBundle:Default:configuracion_cuenta }
+    requirements:
+        _method:  GET|POST
+
+accessControl:
+    pattern:  /accessControl
+    defaults: { _controller: simProductionHomeBundle:Default:accessControl }
+
+homepage:
+    pattern:  /i/homepage
+    defaults: { _controller: simProductionHomeBundle:Default:homepage }
+
+logout:
+    pattern:  /logout
+    defaults: { _controller: simProductionHomeBundle:Default:logout }
+
+mapa:
+    pattern:  /i/mapa
+    defaults: { _controller: simProductionHomeBundle:Default:mapa }
+
+empresa:
+    pattern:  /i/empresa/{id}
+    defaults: { _controller: simProductionHomeBundle:Default:empresa }
+
+centro:
+    pattern:  /i/centro/{id}
+    defaults: { _controller: simProductionHomeBundle:Default:centro }
+
+modificarNombre:
+    pattern:  /i/modificarNombre
+    defaults: { _controller: simProductionHomeBundle:Default:modificarNombre }
+
+modificarLogo:
+    pattern:  /i/modificarLogo
+    defaults: { _controller: simProductionHomeBundle:Default:modificarLogo }
+
+modificarPass:
+    pattern:  /i/modificarPass/{pass_ant}/{pass_new}
+    defaults: { _controller: simProductionHomeBundle:Default:modificarPass }
+
+modificarEmail:
+    pattern:  /i/modificarEmail
+    defaults: { _controller: simProductionHomeBundle:Default:modificarEmail }
+
+guardarAceptacion:
+    pattern:  /i/guardarAceptacion
+    defaults: { _controller: simProductionHomeBundle:Default:guardarAceptacion }
+
+cuenta:
+    pattern:  /i/cuenta
+    defaults: { _controller: simProductionHomeBundle:Default:cuenta }
+
+subirnivel:
+    pattern:  /i/subirnivel
+    defaults: { _controller: simProductionHomeBundle:Default:subirnivel }
+#------------------------------PERSONAL----------------------------------
+
+formacion:
+    pattern:  /i/formacion/{id}
+    defaults: { _controller: simProductionHomeBundle:Personal:formacion }
+    requirements:
+        _method:  GET|POST
+
+cursos:
+    pattern:  /i/cursos/{id}
+    defaults: { _controller: simProductionHomeBundle:Personal:cursos }
+    requirements:
+        _method:  GET|POST
+mostrarEmpleados:
+    pattern:  /i/mostrarEmpleados/{idPerfil}
+    defaults: { _controller: simProductionHomeBundle:Personal:mostrarEmpleados }
+    requirements:
+        _method:  GET|POST
+
+personal:
+    pattern:  /i/personal
+    defaults: { _controller: simProductionHomeBundle:Personal:personal }
+
+formarEmpleado:
+    pattern:  /i/formarEmpleado/{idEmpleado}/{idCurso}
+    defaults: { _controller: simProductionHomeBundle:Personal:formarEmpleado }
+
+recargarEmpleados:
+    pattern:  /i/recargarEmpleados
+    defaults: { _controller: simProductionHomeBundle:Personal:recargarEmpleados }
+
+despedirEmpleado:
+    pattern:  /i/despedirEmpleado/{idEmpleado}
+    defaults: { _controller: simProductionHomeBundle:Personal:despedirEmpleado }
+
+calcularFiniquito:
+    pattern:  /i/calcularFiniquito/{idEmpleado}
+    defaults: { _controller: simProductionHomeBundle:Personal:calcularFiniquito }
+
+nuevo_empleado:
+    pattern:  /i/nuevo_empleado/{id}
+    defaults: { _controller: simProductionHomeBundle:Personal:nuevo_empleado }
+    requirements:
+        _method:  GET|POST
+
+#------------------------------BANCO----------------------------------
+
+banco:
+    pattern:  /i/banco
+    defaults: { _controller: simProductionHomeBundle:Banco:banco }
+
+prestamo:
+    pattern:  /i/prestamo
+    defaults: { _controller: simProductionHomeBundle:Banco:prestamo }
+
+
+#------------------------------COMPRAS----------------------------------
+
+compras:
+    pattern:  /i/compras
+    defaults: { _controller: simProductionHomeBundle:Compras:compras }
+
+comprarLote:
+    pattern:  /i/comprarLote/{id}
+    defaults: { _controller: simProductionHomeBundle:Compras:comprarLote }
+    requirements:
+        _method:  GET|POST
+
+compraEmergencia:
+    pattern:  /i/compraEmergencia/{id}/{cantidad}
+    defaults: { _controller: simProductionHomeBundle:Compras:compraEmergencia }
+    requirements:
+        _method:  GET|POST
+
+mostrarHistorialCompras:
+    pattern:  /i/mostrarHistorialCompras
+    defaults: { _controller: simProductionHomeBundle:Compras:mostrarHistorialCompras }
+
+#------------------------------VENTAS----------------------------------
+
+ventas:
+    pattern:  /i/ventas
+    defaults: { _controller: simProductionHomeBundle:Ventas:ventas }
+    requirements:
+        _method:  GET|POST
+
+fijarLote:
+    pattern:  /i/fijarLote
+    defaults: { _controller: simProductionHomeBundle:Ventas:fijarLote }
+    requirements:
+        _method:  POST
+
+ventaEmergencia:
+    pattern:  /i/ventaEmergencia
+    defaults: { _controller: simProductionHomeBundle:Ventas:ventaEmergencia }
+    requirements:
+        _method:  POST
+
+borrarLote:
+    pattern:  /i/borrarLote/{id}
+    defaults: { _controller: simProductionHomeBundle:Ventas:borrarLote }
+
+mostrarHistorialVentas:
+    pattern:  /i/mostrarHistorialVentas
+    defaults: { _controller: simProductionHomeBundle:Ventas:mostrarHistorialVentas }
+
+mostrarLotesVentas:
+    pattern:  /i/mostrarLotesVentas
+    defaults: { _controller: simProductionHomeBundle:Ventas:mostrarLotesVentas }
+
+#------------------------------MENSAJES----------------------------------
+
+mensajes:
+    pattern:  /i/mensajes
+    defaults: { _controller: simProductionHomeBundle:Mensajes:mensajes }
+
+borrarMensaje1:
+    pattern:  /i/borrarMensaje1/{id}
+    defaults: { _controller: simProductionHomeBundle:Mensajes:borrarMensaje1 }
+
+borrarMensaje2:
+    pattern:  /i/borrarMensaje2/{id}
+    defaults: { _controller: simProductionHomeBundle:Mensajes:borrarMensaje2 }
+
+mensajes_enviados:
+    pattern:  /i/mensajes_enviados
+    defaults: { _controller: simProductionHomeBundle:Mensajes:mensajes_enviados }
+
+new_mensaje:
+    pattern:  /i/new_mensaje
+    defaults: { _controller: simProductionHomeBundle:Mensajes:new_mensaje }
+    requirements:
+        _method:  GET|POST
+
+show_new_mensaje:
+    pattern:  /i/show_new_mensaje/{id}
+    defaults: { _controller: simProductionHomeBundle:Mensajes:show_new_mensaje }
+
+comprobarDestino:
+    pattern:  /i/comprobarDestino/{nombre}
+    defaults: { _controller: simProductionHomeBundle:Mensajes:comprobarDestino }
+
+mensaje:
+    pattern:  /i/mensaje/{id}
+    defaults: { _controller: simProductionHomeBundle:Mensajes:mensaje }
+    requirements:
+        _method:  GET|POST
+
+mensaje_enviado:
+    pattern:  /i/mensaje_enviado/{id}
+    defaults: { _controller: simProductionHomeBundle:Mensajes:mensaje_enviado }
+    requirements:
+        _method:  GET|POST
+
+enviarMensaje:
+    pattern:  /i/enviarMensaje/{emp}/{mens}
+    defaults: { _controller: simProductionHomeBundle:Mensajes:enviarMensaje }
+
+#------------------------------  ADMIN  ----------------------------------------
+admin:
+    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
+    prefix: /admin
+
+_sonata_admin:
+    resource: .
+    type: sonata_admin
+    prefix: /admin
+
+#------------------------------  TAREAS  ----------------------------------------
+tratarTareas:
+    pattern:  /tratarTareas
+    defaults: { _controller: simProductionHomeBundle:TareasProgramadas:tratarTareas }

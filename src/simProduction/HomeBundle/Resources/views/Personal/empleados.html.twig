@@ -1,0 +1,9 @@
+
+	<div id="empleados">
+		<span class="little">Total empleados contratados: <a href="#" onClick="mostrarEmpleados('0');"> ››</a></span><br/>
+		{% for perfil in perfiles %}	
+			<span class="little">&emsp;- {{ perfil.salarioBase }} {{ perfil.nombre }}<a href="#" onClick="mostrarEmpleados('{{perfil.id}}');"> ››</a></span><br/>
+		{% endfor %}			
+	</div>
+
+			

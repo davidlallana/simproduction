@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="es"> 
+<head> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<title>Acerca de - SimProduction</title>
+		<link href="{{ asset('css/login2.css') }}" type="text/css" rel="stylesheet" />
+	    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
+    </head>
+    <body>		
+		<div class="header ">
+			<div class="bg">
+				<div class="logo"> 
+					<a href="login"><img src="{{ asset('images/logo.png') }}" alt="logo"/></a>
+				</div>
+			</div>
+		</div>	
+		<div class="cabecera">
+			<h3><a href="index">Inicio</a> › Acerca de</h3>
+		</div>		
+		<div class="bg titulo">
+			<h1>Acerca de simProduction</h1>
+			<h3>En esta sección se explican todas las características del juego, tanto lógicas como técnicas.</h3>
+		</div>
+		<div class="wrap">
+			<div class="contenido">
+				<div class="cuadro">
+					<div class="imagenI">
+						<img src="{{ asset('images/image-02.png') }}" alt="" />
+					</div>	
+					<div class="textoD">
+						<h3>¿Qué es simProduction?</h3>
+						SimProduction es un juego online de simulación empresarial y estrategia de producción. El objetivo es prosperar dentro de una sociedad aprendiendo los mecanismos de dirección de la empresa.<br/><br/>
+						Podrás controlar todos los ámbitos de la empresa, desde las finanzas hasta la producción, pasando por la gestión de personal o compra de proveedores.<br/><br/>
+						Además será muy importante el aprendizaje respecto a las negociaciones de compra y venta de productos con otros usuarios del juego.
+					</div>			
+				</div>			
+				<div class="cuadro">					
+					<div class="textoI">
+						<h3>¿Por qué simProduction?</h3>
+						Es un proyecto propuesto por la Cátedra de Telefónica en colaboración con la Universidad de Deusto.<br/><br/>
+						La <a href="http://blog.catedratelefonica.deusto.es/">Cátedra de Telefónica</a> es un Centro de Investigación y Desarrollo sobre Nuevas Tecnologías para la Educación, apoyado y financiado por la Fundación Telefónica. En la cátedra se desarrollan proyectos de investigación en diversos ámbitos, con el objetivo fundamental de promover la experimentación y fomentar el avance científico y social.<br/><br/>
+						<h3>Contacto</h3>
+						Si tienes algún problema o sugerencia, puedes ponerte en contacto con nosotros vía <a href="mailto:davidlallana@gmail.com">email</a>.<br/><br/>
+					</div>	
+					<div class="imagenD">
+						<img src="{{ asset('images/image-03.png') }}" alt="" />
+					</div>								
+				</div>	
+				
+				<div class="tablero">
+				<h3>Características técnicas</h3>
+				SimProduction es un juego online compatible con la mayor parte de navegadores del mercado, ya que ha sido desarrollado con nuevas tecnologías como HTML5, CSS3, Jquery, php o javascript; enmarcadas dentro del framework de desarrollo web Symfony2.<br/><br/><br/>
+				<img src="{{ asset('images/tech-1.png') }}" alt="" />
+				<img src="{{ asset('images/tech-2.png') }}" alt="" />
+				<img src="{{ asset('images/tech-3.png') }}" alt="" />
+				<img src="{{ asset('images/tech-4.png') }}" alt="" />
+				<img src="{{ asset('images/tech-5.png') }}" alt="" />
+				<img src="{{ asset('images/tech-6.png') }}" alt="" />
+				</div>												
+			</div>			
+		</div>			
+		<div class="bg">
+			<div class="footer clear">	
+				<div class="navigation">
+					<ul>
+						<li><a href="{{ url('index') }}">Inicio</a></li>
+						<li><a href="{{ url('acercaDe') }}">Acerca de</a></li>
+						<li><a href="{{ url('termsOfUse') }}">Términos de uso</a></li>
+						<li><a href="{{ url('ayuda') }}">F.A.Q.</a></li>			
+						<li class="laster"><a href="{{ url('registro') }}">Registro</a></li>			
+					</ul>
+				</div>		
+				<div class="author">Copyright © 2013, Cátedra Telefónica - Deusto</div>
+			</div>
+		</div>	
+    </body>
+</html>
+
+

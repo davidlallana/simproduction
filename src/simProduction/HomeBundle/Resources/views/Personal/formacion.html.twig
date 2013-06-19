@@ -1,0 +1,26 @@
+<article class="half-last  data-block">
+	<div class="data-container with-header double-height ">		
+		<div id="formacion">
+			<header>
+				<h2>Ficha de {{empleado.nombre}} {{empleado.apellidos}}</h2>
+			</header>	
+			<div class="empleado clear">
+				<img src="{{ asset('images/users.png') }}" alt="logo" />
+				<strong>Puesto: </strong><span class="cursiva2">{{ empleado.PerfilTrabajador.nombre }}</span> <br/>
+				<strong>Alta en la empresa:</strong> {{ empleado.incorporacion | date('d/m/y') }}<br/>
+				<strong>Salario mensual:</strong> {{ empleado.salario | number_format(0, ',', '.') }} €<br/>
+				<a href="#" onClick="despedirEmpleado('{{ empleado.id }}','{{ empleado.nombre }} {{ empleado.apellidos }}','{{ empleado.PerfilTrabajador.id }}');" >Despedir empleado ››</a>
+			</div>
+			<table class="normal clear">			
+				<tbody >	
+					{% for formacion in formaciones %}	
+						<tr>
+							<td>{{ formacion.formacion.nombre }}</td>
+							<td>{% if( formacion.formado==1) %}<img class="formado" alt="image" src="{{ asset('images/ok.png') }}" />{% endif %}</td>
+						</tr>
+					{% endfor %}						
+				</tbody>
+			</table>
+		</div>
+	</div>
+</article>

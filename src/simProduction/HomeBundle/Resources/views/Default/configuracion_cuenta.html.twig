@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="es"> 
+<head> 
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+		<title>Configuración de cuenta - SimProduction</title>
+		<link href="{{ asset('css/login2.css') }}" type="text/css" rel="stylesheet" />
+	    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" />
+    </head>
+      <body>		
+		<div class="header ">
+			<div class="bg">
+				<div class="logo"> 
+					<a href="login"><img src="{{ asset('images/logo.png') }}" alt="logo"/></a>
+				</div>
+			</div>
+		</div>	
+		<div class="cabecera">
+			<h3><a href="{{ url('logout') }}">Cerrar sesión</a></h3>	
+
+		</div>		
+		<div class="bg titulo">
+			<h1>Características de la empresa</h1>
+			<h3>Todavía no puedes empezar a jugar. Tienes que decirnos algunos detalles sobre tu empesa.</h3>
+		</div>
+		<div class="wrap">
+			<div class="contenido">		
+				<div class="formregistro">
+					<div class="col3">					
+						<form action="{{ path('configuracion_cuenta') }}" method="post" {{ form_enctype(form) }}>						
+
+							<div class="error">
+								{{ form_errors(form) }}
+							</div>	
+							<h3>Sector de la empresa</h3>
+							<p>En simProduction, te damos a elegir tres sectores en los que implantar tu empresa. Los tres sectores son los siguientes: la extracción de minerales, la producción de herramientas y la fabricación de vehículos.
+								<div class="right">
+									{{ form_errors(form.sector) }}
+									{{ form_widget(form.sector)}}
+								</div>	
+							</p>
+						
+							<h3>Nombre de la empresa</h3>
+							<p>Indica el nombre de tu empresa. Debes tener en cuenta que será el nombre por el que otros usuarios te reconocerán y debe ser identificativo.
+								<div>
+									{{ form_errors(form.nombre) }}
+									{{ form_widget(form.nombre, {'attr': {'onBlur': 'recargarLogo();','placeholder': 'Nombre de la empresa','autocomplete':'off'}})}}
+								</div>
+							</p>
+							
+							<h3>Logotipo de la empresa</h3>
+							<p>Sube el logotipo de tu empresa. Debes tratar que las dimensiones del mismo sean cuadradas ya que se adaptará a esta forma. Súbelo en formato .jpg
+								<div>
+									{{ form_errors(form.logo) }}
+									{{ form_widget(form.logo, {'attr': {'onBlur': 'recargarLogo();'}})}}
+								</div>
+							</p>
+							{{ form_rest(form) }}
+							<br/>	 
+							<p><button class="btn" type="submit">Empezar a jugar</button></p>
+					</form>	
+					</div>	
+				</div>				
+			</div>	
+		</div>	
+		<div class="bg">
+			<div class="footer clear">	
+				<div class="navigation">
+					<ul>
+						<li><a href="{{ url('index') }}">Inicio</a></li>
+						<li><a href="{{ url('acercaDe') }}">Acerca de</a></li>
+						<li><a href="{{ url('termsOfUse') }}">Términos de uso</a></li>
+						<li><a href="{{ url('ayuda') }}">F.A.Q.</a></li>			
+						<li class="laster"><a href="{{ url('registro') }}">Registro</a></li>			
+					</ul>
+				</div>		
+				<div class="author">Copyright © 2013, Cátedra Telefónica - Deusto</div>
+			</div>
+		</div>	
+		<script src="{{ asset('js/jquery.min.js') }}"></script>
+		<script src="{{ asset('js/html5placeholder.jquery.js') }}"></script>
+		<script>
+			$(function(){
+			  $(':input[placeholder]').placeholder();
+			});			
+		</script>
+	</body>
+</html>
+
+

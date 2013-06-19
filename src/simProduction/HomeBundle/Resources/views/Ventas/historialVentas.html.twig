@@ -1,0 +1,33 @@
+
+<div id="boxscroll">
+	<table class="normal sortable">			
+		<tbody>			
+		{% if ventas==null %}
+			<p>No has realizado ninguna venta todavía</p>
+		{% else %}
+			<tr>
+				<th>Empresa compradora</th>
+				<th class="sorttable_numeric">Cantidad</th>
+				<th class="sorttable_numeric">Ingresado</th>
+				<th>Fecha</th>
+			</tr>
+			{% for venta in ventas %}	
+			<tr>
+				<td>{{ venta.empresaCompradora }}</td>
+				<td class="ancho100">{{ venta.cantidad }}</td>
+				<td class="ancho100">{{ venta.precio }} €</td>
+				<td class="ancho50">{{ venta.fecha | date('d/m/Y') }}</td>
+			</tr>
+			{% endfor %}						
+		{% endif %}						
+		</tbody>
+	</table>
+</div>
+<br/>
+{% block javascripts %}
+<script>
+  $(document).ready(function() {		  
+	$("#boxscroll").niceScroll({touchbehavior:true});	  
+  });
+</script>
+{% endblock %}

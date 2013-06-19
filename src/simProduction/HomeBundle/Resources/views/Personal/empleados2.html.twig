@@ -1,0 +1,19 @@
+<div id="boxscroll2" class="listaEmpleados">
+	<table>			
+		<tbody >	
+			{% for emp in empleados %}	
+				<tr onClick="marcar('{{emp.id }}');">
+					<td>{{ emp.nombre }} {{ emp.apellidos }}</td>
+				</tr>
+			{% endfor %}						
+		</tbody>
+	</table>		
+</div>
+
+{% block javascripts %}
+	<script>
+	  $(document).ready(function() {		  
+		$("#boxscroll2").niceScroll({touchbehavior:true});	  
+	  });
+	</script>	
+{% endblock %}
